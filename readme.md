@@ -14,7 +14,8 @@ signal modeling computes intensities from tissue properties (ρ, R2) via MR sign
 differentiable splatting
 ## 📃 Dependencies and Installation
 python 3.10
-pytorch 1.10.0
+
+pytorch 2.10.0
 ```bash
 pip install requirements.txt
 git clone https://github.com/XingtongGe/gsplat.git
