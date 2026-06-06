@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>STA-MRI</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main>
+    <section class="paper-header">
+      <p class="eyebrow">Project Page</p>
+      <h1>STA-MRI: Toward Physics-Aware MRI Image Super-Resolution</h1>
+      <p class="authors">Author Names</p>
+      <p class="affiliations">Institution Names</p>
+      <nav class="links" aria-label="project links">
+        <a href="https://github.com/weilihua0205/STAMRI">Code</a>
+        <a href="#">BibTeX</a>
+      </nav>
+    </section>
+
+    <section class="paper-section" aria-label="Motivation">
+      <h2>Motivation</h2>
+      <img src="./files/motivation.png" alt="Motivation" class="section-image">
+      <p class="caption">Figure 1. Motivation for dynamic-resolution MRI super-resolution.</p>
+      <p>
+        As dictated by MRI acquisition physics [33], [34], under fixed hardware and scan-time constraints, spatial resolution
+        and SNR are fundamentally intertwined: increasing resolution reduces SNR, while improving SNR can come at the cost
+        of spatial resolution. Furthermore, recent studies show that tuning acquisition parameters to achieve an SNR of around
+        16 dB captures the most structurally informative content. The figure shows that a given low-resolution image may not
+        be the optimal one acquired from the MRI system.
+      </p>
+    </section>
+
+    <section class="paper-section" aria-label="Overview">
+      <h2>Overview</h2>
+      <img src="./files/pipeline.png" alt="Pipeline" class="section-image">
+      <p class="caption">Figure 2. Overview of the proposed physics-aware 2D Gaussian splatting framework.</p>
+      <p>
+        An arbitrary-resolution input is processed through two parallel pathways: a segmentator generates tissue masks for
+        segmentation-guided primitive allocation, while an encoder extracts LR features. Two modules subsequently estimate
+        Gaussian parameters: prior-aware representation predicts position offsets and selects covariance matrices from an
+        MRI-specific dictionary, while physics-constrained signal modeling computes intensities from tissue properties
+        (alpha, R2) via MR signal equations. The final high-resolution output is synthesized through differentiable splatting.
+      </p>
+    </section>
+
+    <section class="paper-section" aria-label="Method">
+      <h2>Method</h2>
+      <p>
+        Our goal is to achieve dynamic adjustment along the resolution-SNR spectrum, enabling MRI super-resolution at
+        informatively optimal operating points. We propose a physics-aware Gaussian splatting framework that enables
+        continuous-scale MRI super-resolution. Our approach introduces three targeted innovations:
+      </p>
+      <ul class="feature-list">
+        <li>Prior-aware Gaussian representation that inserts domain-specific priors to guarantee anatomical structural fidelity and clarity.</li>
+        <li>Physics-constrained signal modeling that designs a tissue relaxation parameter-based signal equation for biophysically plausible super-resolution.</li>
+        <li>Meta-learning-based adaptation that bridges the domain gap between synthetic training and real low-field acquisitions.</li>
+      </ul>
+    </section>
+
+    <section class="paper-section" aria-label="Results">
+      <h2>Results</h2>
+      <img src="./files/table.png" alt="Quantitative results table" class="section-image table-image">
+      <p class="caption">Table 1. Quantitative comparison on simulated and real multi-resolution MRI datasets.</p>
+      <p>
+        As shown in the table, at the x0.7 resolution scale of the simulated dataset, our method achieves a PSNR of 28.10 dB,
+        SSIM of 0.9234, HFEN of 0.3051, and DISTS of 0.1148, representing the best performance among all scales. The finding
+        supports our hypothesis that pursuing the highest input resolution is not always optimal for SR. On the real-world
+        dataset, at x0.76, our method achieves the lowest HFEN (0.4570) and competitive performance across other metrics
+        (SSIM: 0.8775, PSNR: 26.76 dB), indicating superior high-frequency structure recovery. These results strengthen our
+        hypothesis: the optimal resolution for MRI super-resolution is not necessarily the highest achievable resolution.
+      </p>
+      <img src="./files/Result.png" alt="Result" class="section-image">
+      <p class="caption">Figure 3. Visual comparison under different input resolutions.</p>
+      <p>
+        We validate our proposed Dynamic-Resolution hypothesis. At x1.0, the SR results exhibit amplified noise and artifacts.
+        At x0.25, excessive degradation leads to loss of structural information that cannot be recovered. At the optimal
+        resolution (x0.7), the reconstructions exhibit the sharpest edges and richest structural details most consistent with
+        the ground truth.
+      </p>
+    </section>
+
+    <section class="paper-section citation-section" aria-label="Citation">
+      <h2>Citation</h2>
+      <p class="muted">BibTeX information can be added here when available.</p>
+    </section>
+  </main>
+</body>
+</html>
