@@ -42,7 +42,7 @@ python test.py --config configs/test/test_static.yaml --checkpoint save/static_e
 ```
 ## Visual Examples
 
-![VISUAL](assets/motivation.png)
+![VISUAL](assets/VIS.png)
 
 ## ✉️ License
 Licensed under a [Creative Commons Attribution-NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/) for Non-commercial use only.
