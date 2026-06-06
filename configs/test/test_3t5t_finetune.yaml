@@ -1,0 +1,12 @@
+checkpoint: save/dynamic_experiment/STAmodel_3t5t_finetune.pth
+
+data_root: /home/dataset/3t5t/test
+lr_subdir: LR
+hr_subdir: HR
+mask_subdir: mask
+
+output_dir: results/finetune_3t5t_from_train_mri_seg_mask_test
+sr_scale: null
+device: cuda
+num_workers: 0
+seed: 1234

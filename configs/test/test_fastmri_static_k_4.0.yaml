@@ -1,0 +1,16 @@
+config: configs/train/train-mri_paired_swinir_syn_seg_k_4.0.yaml
+checkpoint: save/dynamic_experiment/checkpoint_best_scale4.yaml
+
+data_root: /home/datasets/k_4.0
+lr_subdir: LR
+hr_subdir: HR
+
+save_dir: results/mri_static_resolution_k_4.0_fastmri_test
+gpu: '0'
+batch_size: 1
+num_workers: 4
+num_vis: 145
+first_k: null
+cache: in_memory
+tile_size: 64
+tile_overlap: 16

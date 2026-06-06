@@ -1,0 +1,12 @@
+checkpoint: save/dynamic_experiment/STAmodel.pth
+
+data_root: /home/datasets/simulated
+lr_subdir: LR
+hr_subdir: HR
+mask_subdir: mask
+
+output_dir: results/mri_dynamic_resolution_test
+sr_scale: null
+device: cuda
+num_workers: 0
+seed: 1234

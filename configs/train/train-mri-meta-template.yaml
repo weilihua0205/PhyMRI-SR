@@ -1,0 +1,192 @@
+meta_train_tasks:
+  - name: sim_task_1
+    patient_id_regex: '^(IXI\d+-HH-\d+)_T2_brain_resampled_slice_\d+\.npy$'
+    patient_id_group: 1
+    dataset:
+      name: paired-npy-folders-with-mask
+      args:
+        root_path_lr: /home/meta_task_all/task1/LR
+        root_path_hr: /home/meta_task_all/task1/HR
+        root_path_mask: /home/meta_task_all/task1/mask
+        cache: in_memory
+        repeat: 1
+    wrapper:
+      name: sr-implicit-paired
+      args:
+        inp_size: 64
+        augment: false
+  - name: sim_task_2
+    patient_id_regex: '^(IXI\d+-HH-\d+)_T2_brain_resampled_slice_\d+\.npy$'
+    patient_id_group: 1
+    dataset:
+      name: paired-npy-folders-with-mask
+      args:
+        root_path_lr: /home/meta_task_all/task2/LR
+        root_path_hr: /home/meta_task_all/task2/HR
+        root_path_mask: /home/meta_task_all/task2/mask
+        cache: in_memory
+        repeat: 1
+    wrapper:
+      name: sr-implicit-paired
+      args:
+        inp_size: 64
+        augment: false
+  - name: sim_task_3
+    patient_id_regex: '^(IXI\d+-HH-\d+)_T2_brain_resampled_slice_\d+\.npy$'
+    patient_id_group: 1
+    dataset:
+      name: paired-npy-folders-with-mask
+      args:
+        root_path_lr: /home/meta_task_all/task3/LR
+        root_path_hr: /home/meta_task_all/task3/HR
+        root_path_mask: /home/meta_task_all/task3/mask
+        cache: in_memory
+        repeat: 1
+    wrapper:
+      name: sr-implicit-paired
+      args:
+        inp_size: 64
+        augment: false
+  - name: sim_task_4
+    patient_id_regex: '^(IXI\d+-HH-\d+)_T2_brain_resampled_slice_\d+\.npy$'
+    patient_id_group: 1
+    dataset:
+      name: paired-npy-folders-with-mask
+      args:
+        root_path_lr: /home/meta_task_all/task4/LR
+        root_path_hr: /home/meta_task_all/task4/HR
+        root_path_mask: /home/meta_task_all/task4/mask
+        cache: in_memory
+        repeat: 1
+    wrapper:
+      name: sr-implicit-paired
+      args:
+        inp_size: 64
+        augment: false
+  - name: real_task_1
+    patient_id_regex: '^(sub-\d+_ses-\d+)_T2_brain_resampled_slice_\d+\.npy$'
+    patient_id_group: 1
+    dataset:
+      name: paired-npy-folders-with-mask
+      args:
+        root_path_lr: /home/meta_task_all/real_task1/LR
+        root_path_hr: /home/meta_task_all/real_task1/HR
+        root_path_mask: /home/meta_task_all/real_task1/mask
+        cache: in_memory
+        repeat: 1
+    wrapper:
+      name: sr-implicit-paired
+      args:
+        inp_size: 64
+        augment: false
+  - name: real_task_2
+    patient_id_regex: '^(sub-\d+_ses-\d+)_T2_brain_resampled_slice_\d+\.npy$'
+    patient_id_group: 1
+    dataset:
+      name: paired-npy-folders-with-mask
+      args:
+        root_path_lr: /home/meta_task_all/real_task2/LR
+        root_path_hr: /home/meta_task_all/real_task2/HR
+        root_path_mask: /home/meta_task_all/real_task2/mask
+        cache: in_memory
+        repeat: 1
+    wrapper:
+      name: sr-implicit-paired
+      args:
+        inp_size: 64
+        augment: false
+
+val_dataset:
+  dataset:
+    name: paired-npy-folders-with-mask
+    args:
+      root_path_lr: /home/meta_task_all/real_val/LR
+      root_path_hr: /home/meta_task_all/real_val/HR
+      root_path_mask: /home/meta_task_all/real_val/mask
+      cache: in_memory
+      repeat: 1
+  wrapper:
+    name: sr-implicit-paired
+    args:
+      inp_size: 64
+      augment: false
+  batch_size: 1
+
+num_workers: 8
+
+model:
+  name: continuous-gaussian
+  args:
+    encoder_spec:
+      name: swinir
+      args:
+        no_upsampling: true
+    cnn_spec: {}
+    fc_spec: {}
+    BLOCK_H: 16
+    BLOCK_W: 16
+
+optimizer:
+  name: adam
+  args:
+    lr: 1.0e-4
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+    weight_decay: 0
+
+meta_optimizer:
+  name: adam
+  args:
+    lr: 5.0e-5
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+    weight_decay: 0
+
+lr_scheduler:
+  name: MultiStepLR
+  args:
+    milestones: [100, 200, 300, 400, 500, 600, 700, 800, 900]
+    gamma: 0.5
+
+loss:
+  name: CombinedLoss
+  args:
+    losses_dict:
+      L1Loss: 0.5
+      FrequencyLoss: 0.5
+      GradientLoss: 0.5
+
+meta_lr: 5.0e-5
+inner_lr: 1.0e-2
+first_order: true  # Use first-order MAML to reduce backward memory
+meta_batch_tasks: 2  # Fewer tasks per episode to lower peak VRAM
+support_size: 2  # Smaller support set per task
+query_size: 2  # Smaller query set per task
+support_patient_num: 1
+query_patient_num: 1
+episodes_per_epoch: 100
+num_inner_steps: 1
+
+scale_reg_weight: 0.0
+scale_reg_loss:
+  max_scale: 0.5
+
+physics_ratio_weight: 0.1
+physics_ratio_loss:
+  target_ratio: 0.3
+
+num_epochs: 1000
+log_interval: 10
+val_interval: 1
+vis_interval: 50
+
+data_norm:
+  inp: {sub: [0], div: [1]}
+  gt: {sub: [0], div: [1]}
+
+eval_type: div2k
+val_compute_dists: false
+seed: 42
+grad_clip: 1.0
+patient_id_regex: '^(IXI\d+-HH-\d+)_T2_brain_slice_\d+\.npy$'
+patient_id_group: 1

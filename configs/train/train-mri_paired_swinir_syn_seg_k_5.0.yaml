@@ -1,0 +1,107 @@
+
+# Train the SR model using fastMRI k-space 5.0 data.
+
+
+
+train_dataset:
+  dataset:
+    name: paired-npy-folders-with-mask
+    args:
+      root_path_lr: /home/dataset/kspace_fastmridata_320/dataset_LR_HR_mask_nii120_kspace5_320_npy/train/LR  
+      root_path_hr: /home/dataset/kspace_fastmridata_320/dataset_LR_HR_mask_nii120_kspace5_320_npy/train/HR  
+      root_path_mask: /home/dataset/kspace_fastmridata_320/dataset_LR_HR_mask_nii120_kspace5_320_npy/train/mask
+      cache: in_memory  
+      repeat: 1
+  wrapper:
+    name: sr-implicit-paired  
+    args:
+      inp_size: 64  
+      augment: false  
+
+
+val_dataset:
+  dataset:
+    name: paired-npy-folders-with-mask
+    args:
+      root_path_lr: /home/dataset/kspace_fastmridata_320/dataset_LR_HR_mask_nii120_kspace5_320_npy/val/LR  
+      root_path_hr: /home/dataset/kspace_fastmridata_320/dataset_LR_HR_mask_nii120_kspace5_320_npy/val/HR  
+      root_path_mask: /home/dataset/kspace_fastmridata_320/dataset_LR_HR_mask_nii120_kspace5_320_npy/val/mask
+      cache: in_memory
+      repeat: 1
+  wrapper:
+    name: sr-implicit-paired
+    args:
+      inp_size: 64  
+      augment: false
+  batch_size: 1
+
+
+batch_size: 4  
+num_workers: 8  
+
+
+model:
+  name: continuous-gaussian
+  args:
+    encoder_spec:
+      name: swinir  
+      args:
+        no_upsampling: true
+    cnn_spec: {}
+    fc_spec: {}
+    
+    BLOCK_H: 16  
+    BLOCK_W: 16 
+
+
+optimizer:
+  name: adam
+  args:
+    lr: 1.0e-4 
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+    weight_decay: 0  
+
+
+lr_scheduler:
+  name: MultiStepLR
+  args:
+    milestones: [100, 200, 300, 400, 500, 600, 700, 800, 900]  
+
+
+loss:
+  name: CombinedLoss
+  args:
+    losses_dict:
+      L1Loss: 0.5          
+      FrequencyLoss: 0.5  
+      PSNRLoss: 0.01
+      GradientLoss: 0.0   
+
+
+scale_reg_weight: 0.0
+scale_reg_loss:
+  max_scale: 0.5   
+
+physics_ratio_weight: 0.1
+physics_ratio_loss:
+  target_ratio: 0.3  
+
+num_epochs: 1000  
+start_epoch: 0  
+log_interval: 1  
+val_interval: 1  
+save_interval: 5  
+
+
+data_norm:
+  
+  inp: {sub: [0], div: [1]}  
+  gt: {sub: [0], div: [1]}  
+
+
+eval_type: div2k  
+
+
+seed: 42  
+grad_clip: 1.0  

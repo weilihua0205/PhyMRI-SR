@@ -1,0 +1,115 @@
+
+# Train the SR model using fastMRI k-space 8.0 data.
+
+# Training dataset
+train_dataset:
+  dataset:
+    name: paired-npy-folders-with-mask
+    args:
+      root_path_lr: /inspire/ssd/tenant_predefaa-9a1b-4522-bb10-8850f313be13/global_user/3795-gongjia/ai4s/meb_1/MRIxField/ContinuousSR-main_MRI_seg_kspace/kspace_fastmridata_320/dataset_LR_HR_mask_nii120_kspace8_320_npy/train/LR  # Path to MRI training LR dataset
+      root_path_hr: /inspire/ssd/tenant_predefaa-9a1b-4522-bb10-8850f313be13/global_user/3795-gongjia/ai4s/meb_1/MRIxField/ContinuousSR-main_MRI_seg_kspace/kspace_fastmridata_320/dataset_LR_HR_mask_nii120_kspace8_320_npy/train/HR  # Path to MRI training HR dataset
+      root_path_mask: //inspire/ssd/tenant_predefaa-9a1b-4522-bb10-8850f313be13/global_user/3795-gongjia/ai4s/meb_1/MRIxField/ContinuousSR-main_MRI_seg_kspace/kspace_fastmridata_320/dataset_LR_HR_mask_nii120_kspace8_320_npy/train/mask
+      cache: in_memory  # Options: none, bin, in_memory
+      repeat: 1
+  wrapper:
+    name: sr-implicit-paired  # Fixed downsampling
+    args:
+      inp_size: 64  # Target HR patch side length (paper uses 256x256)
+      augment: false  # Enable data augmentation (flips, etc.)
+
+# Validation dataset
+val_dataset:
+  dataset:
+    name: paired-npy-folders-with-mask
+    args:
+      root_path_lr: /inspire/ssd/tenant_predefaa-9a1b-4522-bb10-8850f313be13/global_user/3795-gongjia/ai4s/meb_1/MRIxField/ContinuousSR-main_MRI_seg_kspace/kspace_fastmridata_320/dataset_LR_HR_mask_nii120_kspace8_320_npy/val/LR  # Path to MRI validation LR dataset
+      root_path_hr: /inspire/ssd/tenant_predefaa-9a1b-4522-bb10-8850f313be13/global_user/3795-gongjia/ai4s/meb_1/MRIxField/ContinuousSR-main_MRI_seg_kspace/kspace_fastmridata_320/dataset_LR_HR_mask_nii120_kspace8_320_npy/val/HR  # Path to MRI validation HR dataset
+      root_path_mask: /inspire/ssd/tenant_predefaa-9a1b-4522-bb10-8850f313be13/global_user/3795-gongjia/ai4s/meb_1/MRIxField/ContinuousSR-main_MRI_seg_kspace/kspace_fastmridata_320/dataset_LR_HR_mask_nii120_kspace8_320_npy/val/mask
+      cache: in_memory
+      repeat: 1
+  wrapper:
+    name: sr-implicit-paired
+    args:
+      inp_size: 64  # LR patch size during validation (match training)
+      augment: false
+  batch_size: 1
+
+# ==================== Data loader configuration ====================
+batch_size: 4  # Training batch size (per-GPU; reduce to 8 to save memory)
+num_workers: 8  # Number of data loading workers
+
+# ==================== Model configuration ====================
+model:
+  name: continuous-gaussian
+  args:
+    encoder_spec:
+      name: swinir  # Use SwinIR as backbone (per paper)
+      args:
+        no_upsampling: true
+    cnn_spec: {}
+    fc_spec: {}
+    # num_points: 500  # Number of Gaussian points
+    BLOCK_H: 16  # Rasterization block height
+    BLOCK_W: 16  # Rasterization block width
+
+# ==================== Optimizer configuration ====================
+optimizer:
+  name: adam
+  args:
+    lr: 1.0e-4  # Learning rate
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+    weight_decay: 0  # L2 regularization
+
+# ==================== LR scheduler ====================
+lr_scheduler:
+  name: MultiStepLR
+  args:
+    milestones: [100, 200, 300, 400, 500, 600, 700, 800, 900]  # Decay every 100 epochs
+    gamma: 0.5  # Decay factor
+
+# ==================== Loss functions ====================
+# Per paper: L1 loss + frequency loss (approximated by PerceptualLoss)
+loss:
+  name: CombinedLoss
+  args:
+    losses_dict:
+      L1Loss: 0.5           # L1 loss, for pixel-level reconstruction accuracy
+      FrequencyLoss: 0.5  # Frequency/perceptual loss, small weight, to enhance high-frequency details
+      PSNRLoss: 0.01
+      GradientLoss: 0.0   # Gradient loss, small weight, to enhance edge details
+# ==================== Scale regularization loss (optional) ====================
+# Encourage network to choose smaller Gaussian kernels to improve detail recovery
+# scale_reg_weight=0.0 disables it; start at 0.02 and adjust after monitoring cho1/cho3 means
+
+scale_reg_weight: 0.0
+scale_reg_loss:
+  max_scale: 0.5   # Penalty applies only above this value; 0.5 encourages scale ≤ 0.5
+
+# ==================== Physics-ratio regularization loss (optional) ====================
+# Prevent phy_ratio collapse to near 0 (local minima where δ replaces physical term)
+# Enable when logs show phy% < 5% and it does not recover
+# Start with physics_ratio_weight=0.1 and target_ratio=0.3
+physics_ratio_weight: 0.1
+physics_ratio_loss:
+  target_ratio: 0.3  # Penalize phy_ratio < 0.3 (hinge-style; no upper bound)
+
+# ==================== Training control parameters ====================
+num_epochs: 1000  # Total training epochs (for quick validation set to 100)
+start_epoch: 0  # Starting epoch (resume will set automatically)
+log_interval: 1  # Print logs every N batches
+val_interval: 1  # Run validation every N epochs
+save_interval: 5  # Save checkpoint every N epochs
+
+# ==================== Data normalization ====================
+data_norm:
+  # Map pixel values from [0,255] to [0,1]
+  inp: {sub: [0], div: [1]}  # Input normalization (/255)
+  gt: {sub: [0], div: [1]}  # GT normalization (/255)
+
+# ==================== Validation configuration ====================
+eval_type: div2k  # Evaluation type (benchmark or div2k)
+
+# ==================== Other configuration ====================
+seed: 42  # Random seed
+grad_clip: 1.0  # Gradient clipping (null=none, or set like 1.0)

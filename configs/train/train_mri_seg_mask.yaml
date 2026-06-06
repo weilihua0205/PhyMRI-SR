@@ -1,0 +1,103 @@
+
+# Train the SR model using simulated paired 64mT–3T data.
+
+# The simulated 64mT images are used as LR inputs, while the corresponding
+# 3T images serve as HR references for supervised training.
+
+
+batch_size: 4
+data_norm:
+  gt:
+    div:
+    - 1
+    sub:
+    - 0
+  inp:
+    div:
+    - 1
+    sub:
+    - 0
+eval_type: div2k
+grad_clip: 1.0
+log_interval: 1
+loss:
+  args:
+    losses_dict:
+      FrequencyLoss: 0.5
+      GradientLoss: 0.5
+      L1Loss: 0.5
+  name: CombinedLoss
+lr_scheduler:
+  args:
+    gamma: 0.5
+    milestones:
+    - 100
+    - 200
+    - 300
+    - 400
+    - 500
+    - 600
+    - 700
+    - 800
+    - 900
+  name: MultiStepLR
+model:
+  args:
+    BLOCK_H: 16
+    BLOCK_W: 16
+    cnn_spec: {}
+    encoder_spec:
+      args:
+        no_upsampling: true
+      name: swinir
+    fc_spec: {}
+  name: continuous-gaussian
+num_epochs: 1000
+num_workers: 8
+optimizer:
+  args:
+    betas:
+    - 0.9
+    - 0.999
+    eps: 1.0e-08
+    lr: 0.0001
+    weight_decay: 0
+  name: adam
+physics_ratio_loss:
+  target_ratio: 0.3
+physics_ratio_weight: 0.1
+save_interval: 5
+scale_reg_loss:
+  max_scale: 0.5
+scale_reg_weight: 0.0
+seed: 42
+start_epoch: 0
+train_dataset:
+  dataset:
+    args:
+      cache: in_memory
+      repeat: 1
+      root_path_hr: /home/dataset/dataset_LR_HR_mask_matched1200_scale0.7_repair/train/HR
+      root_path_lr: /home/dataset/dataset_LR_HR_mask_matched1200_scale0.7_repair/train/LR
+      root_path_mask: /home/dataset/dataset_LR_HR_mask_matched1200_scale0.7_repair/train/mask
+    name: paired-npy-folders-with-mask
+  wrapper:
+    args:
+      augment: false
+      inp_size: 64
+    name: sr-implicit-paired
+val_dataset:
+  batch_size: 1
+  dataset:
+    args:
+      repeat: 1
+      root_path_hr: /home/dataset/dataset_LR_HR_mask_matched1200_scale0.7_repair/val/HR
+      root_path_lr: /home/dataset/dataset_LR_HR_mask_matched1200_scale0.7_repair/val/LR
+      root_path_mask: /home/dataset/dataset_LR_HR_mask_matched1200_scale0.7_repair/val/mask
+    name: paired-npy-folders-with-mask
+  wrapper:
+    args:
+      augment: false
+      inp_size: 64
+    name: sr-implicit-paired
+val_interval: 1

@@ -1,0 +1,118 @@
+# ContinuousSR 训练配置 - DIV2K 数据集
+# 训练数据集：DIV2K（800张2K分辨率图像）
+# 验证数据集：DIV2K_valid（100张2K分辨率图像）
+
+# ==================== 数据集配置 ====================
+
+# 训练数据集
+train_dataset:
+  dataset:
+    name: paired-npy-folders-with-mask
+    args:
+      root_path_lr: /inspire/ssd/tenant_predefaa-9a1b-4522-bb10-8850f313be13/global_user/3795-gongjia/ai4s/meb_1/MRIxField/ContinuousSR-main_MRI_seg_kspace/kspace_fastmridata_320_1200_3/scale4_320_npy/train/LR  # MRI训练集LR集路径
+      root_path_hr: /inspire/ssd/tenant_predefaa-9a1b-4522-bb10-8850f313be13/global_user/3795-gongjia/ai4s/meb_1/MRIxField/ContinuousSR-main_MRI_seg_kspace/kspace_fastmridata_320_1200_3/scale4_320_npy/train/HR  # MRI训练集HR集路径
+      root_path_mask: /inspire/ssd/tenant_predefaa-9a1b-4522-bb10-8850f313be13/global_user/3795-gongjia/ai4s/meb_1/MRIxField/ContinuousSR-main_MRI_seg_kspace/kspace_fastmridata_320_1200_3/scale4_320_npy/train/mask
+      cache: in_memory  # 选项: none, bin, in_memory
+      repeat: 1
+  wrapper:
+    name: sr-implicit-paired  # 固定下采样
+    args:
+      inp_size: 64  # HR patch 目标边长（文章HR patch 256x256）
+      augment: false  # 启用数据增强（翻转等）
+
+# 验证数据集
+val_dataset:
+  dataset:
+    name: paired-npy-folders-with-mask
+    args:
+      root_path_lr: /inspire/ssd/tenant_predefaa-9a1b-4522-bb10-8850f313be13/global_user/3795-gongjia/ai4s/meb_1/MRIxField/ContinuousSR-main_MRI_seg_kspace/kspace_fastmridata_320_1200_3/scale4_320_npy/val/LR  # MRI验证集LR集路径
+      root_path_hr: /inspire/ssd/tenant_predefaa-9a1b-4522-bb10-8850f313be13/global_user/3795-gongjia/ai4s/meb_1/MRIxField/ContinuousSR-main_MRI_seg_kspace/kspace_fastmridata_320_1200_3/scale4_320_npy/val/HR  # MRI验证集HR集路径
+      root_path_mask: /inspire/ssd/tenant_predefaa-9a1b-4522-bb10-8850f313be13/global_user/3795-gongjia/ai4s/meb_1/MRIxField/ContinuousSR-main_MRI_seg_kspace/kspace_fastmridata_320_1200_3/scale4_320_npy/val/mask
+      cache: in_memory
+      repeat: 1
+  wrapper:
+    name: sr-implicit-paired
+    args:
+      inp_size: 64  # 验证时LR patch大小（匹配训练）
+      augment: false
+  batch_size: 1
+
+# ==================== 数据加载器配置 ====================
+batch_size: 4  # 训练 batch size（单GPU，减少到8以节省内存）
+num_workers: 8  # 数据加载线程数
+
+# ==================== 模型配置 ====================
+model:
+  name: continuous-gaussian
+  args:
+    encoder_spec:
+      name: swinir  # 使用 SwinIR 作为 backbone（根据文章）
+      args:
+        no_upsampling: true
+    cnn_spec: {}
+    fc_spec: {}
+    # num_points: 500  # Gaussian 点数
+    BLOCK_H: 16  # Rasterization block 高度
+    BLOCK_W: 16  # Rasterization block 宽度
+
+# ==================== 优化器配置 ====================
+optimizer:
+  name: adam
+  args:
+    lr: 1.0e-4  # 学习率
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+    weight_decay: 0  # L2 正则化
+
+# ==================== 学习率调度器 ====================
+lr_scheduler:
+  name: MultiStepLR
+  args:
+    milestones: [100, 200, 300, 400, 500, 600, 700, 800, 900]  # 每100 epoch 衰减
+    gamma: 0.5  # 衰减因子
+
+# ==================== 损失函数 ====================
+# 根据文章：L1损失 + 频率损失（使用 PerceptualLoss 近似频率损失）
+loss:
+  name: CombinedLoss
+  args:
+    losses_dict:
+      L1Loss: 0.5           # L1 损失，用于像素级重建精度
+      FrequencyLoss: 0.5  # 频率/感知损失，权重较小，用于增强高频细节
+      PSNRLoss: 0.01
+      GradientLoss: 0.0   # 梯度损失，权重较小，用于增强边缘细节
+# ==================== Scale 软约束损失（可选） ====================
+# 鼓励网络选择更小的高斯核，提升细节恢复
+# scale_reg_weight=0.0 表示禁用；建议从 0.02 开始，观察 cho1/cho3 均值变化后调整
+
+scale_reg_weight: 0.0
+scale_reg_loss:
+  max_scale: 0.5   # 超过此值才产生惩罚；0.5 表示鼓励 scale ≤ 0.5 的高斯核
+
+# ==================== 物理先验占比正则损失（可选） ====================
+# 防止 phy_ratio 塌陷到接近0（δ完全取代物理项的局部最优陷阱）
+# 日志中出现 phy%<5% 且长期不恢复时，开启此项
+# 建议从 physics_ratio_weight=0.1 开始，target_ratio=0.3
+physics_ratio_weight: 0.1
+physics_ratio_loss:
+  target_ratio: 0.3  # 惩罚 phy_ratio < 0.3 的情况（Hinge形式，不限制上限）
+
+# ==================== 训练控制参数 ====================
+num_epochs: 1000  # 总训练轮数（快速验证，设置为100）
+start_epoch: 0  # 起始 epoch（resume 时会自动设置）
+log_interval: 1  # 每 N 个 batch 打印日志
+val_interval: 1  # 每 N 个 epoch 进行验证
+save_interval: 5  # 每 N 个 epoch 保存 checkpoint
+
+# ==================== 数据归一化 ====================
+data_norm:
+  # 将像素值从 [0,255] 映射到 [0,1]
+  inp: {sub: [0], div: [1]}  # 输入归一化（/255）
+  gt: {sub: [0], div: [1]}  # GT 归一化（/255）
+
+# ==================== 验证配置 ====================
+eval_type: div2k  # 评估类型（benchmark 或 div2k）
+
+# ==================== 其他配置 ====================
+seed: 42  # 随机种子
+grad_clip: 1.0  # 梯度裁剪（null=不裁剪，或设置如 1.0）
