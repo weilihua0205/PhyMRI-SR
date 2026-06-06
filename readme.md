@@ -6,7 +6,12 @@ we propose a novel 2D Gaussian splatting-based MRI super-resolution framework th
 ## 💡 Motivation and Framework
 ![Motivation](assets/motivation.png)
 Illustration of the trade-off between spatial resolution and signal-to-noise ratio (SNR) under a simulated ultra-low MRI system(64 mT). In the high-resolution but low-SNR setting, severe noise leads to fragmented and discontinuous anatomical structures, as highlighted in the yellow boxes. The balanced regime produces more coherent and struc-turally consistent reconstructions, closely matching the HR reference. In the low-resolution high-SNR setting, structures appear over-smoothed, and fine anatomical details are lost due to partial volume effects.
-
+![Framework] (assets/pipeline.png)
+Overview of the proposed physics-aware 2D GS framework. An arbitrary-resolution input is processed through two parallel pathways: a segmentator
+generates tissue masks for segmentation-guided primitive allocation, while an encoder extracts LR features. Two modules subsequently estimate Gaussian
+parameters: prior-aware representation predicts position offsets and selects covariance matrices from an MRI-specific dictionary, while physics-constrained
+signal modeling computes intensities from tissue properties (ρ, R2) via MR signal equations. The final high-resolution output is synthesized through
+differentiable splatting
 ## 📃 Dependencies and Installation
 python 3.10
 pytorch 1.10.0
