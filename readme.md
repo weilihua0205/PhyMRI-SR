@@ -1,4 +1,4 @@
-# STA-MRI: Toward Physics-Aware MRI ImageSuper-Resolution
+# PhyMRI-SR: Toward Physics-Aware MRI ImageSuper-Resolution
 
 ## 💡 Summary
 we propose a novel 2D Gaussian splatting-based MRI super-resolution framework that accommodates dynamically varying input resolutions. We further introduce a prior-aware Gaussian parameterization module to enhance structural fidelity and a physics-constrained signal modeling module to ensure biophysically plausible intensity reconstruction. 
