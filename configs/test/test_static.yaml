@@ -5,7 +5,7 @@ lr_subdir: LR
 hr_subdir: HR
 mask_subdir: mask
 
-output_dir: results/mri_paired_swinir_syn_seg_k_4.0_meta_test
+output_dir: results/
 sr_scale: 4.0
 device: cuda
 num_workers: 0
