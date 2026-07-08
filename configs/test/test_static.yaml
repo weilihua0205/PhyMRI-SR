@@ -1,6 +1,6 @@
 checkpoint: save/static_experiment/64mT3T_static_experiment.pth
 
-data_root: /home/datasets/real_64mt3t
+data_root: test_datasets/real_64mt3t
 lr_subdir: LR
 hr_subdir: HR
 mask_subdir: mask
