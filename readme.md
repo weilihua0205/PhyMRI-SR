@@ -38,12 +38,7 @@ The other pretrained model weights are not publicly released at this stage. We w
 ### Inference
 Place all pretrained weights in "save" folders firstly. Here are  example commands for inference
 ```bash
-# dynamic experiments on simulated dataset
-python test.py --config configs/test/test_dynamic_train_mri_seg_mask.yaml --checkpoint save/dynamic_experiment/PhyMRI_model.pth
-#dynamic experiments on real 3T-5T dataset
-python test.py --config configs/test/test_3t5t_finetune.yaml --checkpoint save/dynamic_experiment/3t5t_finetune.pth
-#static experiments on fastMRI dataset
-python test_fastMRI.py --test_config ./configs/test/test_fastmri_static_k_4.0.yaml --checkpoint save/static_experiment/checkpoint_best_scale4.pth
+
 #static experiments on real 64mT-3T dataset
 python test.py --config configs/test/test_static.yaml --checkpoint save/static_experiment/64mT3T_static_experiment.pth
 ```
