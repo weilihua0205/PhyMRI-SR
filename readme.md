@@ -29,8 +29,11 @@ The datasets used in this study are not publicly available at this stage due to 
 
 
 ### Pretrained model
-The pretrained model weights are not publicly released at this stage. We will update this section with download links once the model checkpoints are available for public access.
-Once released, please place the downloaded model weights in the designated folder before running inference.
+- Static-resolution experiment : [STAmodel_static_experiment](https://drive.google.com/file/d/15X4U_0wSmW8dtETTQPSBZmUlXCzU4nQC/view?usp=drive_link)
+- Once downloaded, place the model in the designated folder, and you’ll be ready to perform inference.
+  
+The other pretrained model weights are not publicly released at this stage. We will update this section with download links once the model checkpoints are available for public access.
+
 
 ### Inference
 Place all pretrained weights in "save" folders firstly. Here are  example commands for inference
