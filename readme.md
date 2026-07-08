@@ -29,7 +29,7 @@ The datasets used in this study are not publicly available at this stage due to 
 
 
 ### Pretrained model
-- Static-resolution experiment : [STAmodel_static_experiment](https://drive.google.com/file/d/15X4U_0wSmW8dtETTQPSBZmUlXCzU4nQC/view?usp=drive_link)
+- Static-resolution experiment : [model_static_experiment](https://drive.google.com/file/d/15X4U_0wSmW8dtETTQPSBZmUlXCzU4nQC/view?usp=drive_link)
 - Once downloaded, place the model in the designated folder, and you’ll be ready to perform inference.
   
 The other pretrained model weights are not publicly released at this stage. We will update this section with download links once the model checkpoints are available for public access.
