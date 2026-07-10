@@ -1,6 +1,6 @@
 # PhyMRI-SR: Toward Physics-Aware MRI ImageSuper-Resolution
 <a href='https://bio-med-i2-lab.github.io/projects/PhyMRI-SR/'><img src='https://img.shields.io/badge/Project-Page-yellow'></a>
-<a href='https://arxiv.org/abs/2607.06238'><img src='https://img.shields.io/badge/PhyMRI-SR-Paper-red?logo=arxiv'></a>
+<a href='https://arxiv.org/abs/2607.06238'><img src='https://img.shields.io/badge/PhyMRI-SR-Paper-red'></a>
 
 
 \* equal contribution # Corresponding author
