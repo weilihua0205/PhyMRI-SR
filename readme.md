@@ -4,14 +4,15 @@
 
 [Lihua Wei]<sup>1</sup><sup>\*</sup>, 
 [Huatong Gao]<sup>1</sup><sup>\*</sup>, 
+
 [Jia Gong](https://scholar.google.com/citations?user=ZV-ThegAAAAJ&hl=zh-CN&oi=ao)<sup>1<sup><sup>2<sup><sup>*<sup><sup>†<sup>, 
 [Zhiyu Tan](https://github.com/SAIS-FUXI)<sup>2<sup><sup>3<sup>, 
 [Hao Li](https://scholar.google.com/citations?user=pHN-QIwAAAAJ&hl=zh-CN)<sup>2<sup><sup>3<sup>, 
 [Jun Liu]<sup>4<sup>, 
 [Zhihua Ren](https://bme.shanghaitech.edu.cn/2021/0326/c8204a1077978/page.html)<sup>1<sup><sup>5<sup><sup>†<sup>
 
-* equal contribution # Corresponding author
-* 
+\* equal contribution # Corresponding author
+
 1 ShanghaiTech University 2 Shanghai Academy of AI for Science 3 Fudan University 4 Lancaster University 5 Shanghai Clinical Research and Trial Center
   
 weilh2025@shanghaitech.edu.cn  gaoht2025@shanghaitech.edu.cn  gongjia@sais.com.cn  renzhh@shanghaitech.edu.cn
