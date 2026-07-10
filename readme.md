@@ -1,15 +1,19 @@
 # PhyMRI-SR: Toward Physics-Aware MRI ImageSuper-Resolution
 <a href='https://bio-med-i2-lab.github.io/projects/PhyMRI-SR/'><img src='https://img.shields.io/badge/Project-Page-yellow'></a>
 <a href='https://arxiv.org/abs/2607.06238'><img src='https://img.shields.io/badge/PhyMRI-SR-Paper-red?logo=arxiv'></a>
-Lihua Wei<sup>1</sup><sup>\*</sup>, 
-Huatong Gao<sup>1</sup><sup>\*</sup>, 
+
+[Lihua Wei]<sup>1</sup><sup>\*</sup>, 
+[Huatong Gao]<sup>1</sup><sup>\*</sup>, 
 [Jia Gong](https://scholar.google.com/citations?user=ZV-ThegAAAAJ&hl=zh-CN&oi=ao)<sup>1<sup><sup>2<sup><sup>*<sup><sup>†<sup>, 
 [Zhiyu Tan](https://github.com/SAIS-FUXI)<sup>2<sup><sup>3<sup>, 
 [Hao Li](https://scholar.google.com/citations?user=pHN-QIwAAAAJ&hl=zh-CN)<sup>2<sup><sup>3<sup>, 
 [Jun Liu]<sup>4<sup>, 
 [Zhihua Ren](https://bme.shanghaitech.edu.cn/2021/0326/c8204a1077978/page.html)<sup>1<sup><sup>5<sup><sup>†<sup>
+
 * equal contribution # Corresponding author
+* 
 1 ShanghaiTech University 2 Shanghai Academy of AI for Science 3 Fudan University 4 Lancaster University 5 Shanghai Clinical Research and Trial Center
+  
 weilh2025@shanghaitech.edu.cn  gaoht2025@shanghaitech.edu.cn  gongjia@sais.com.cn  renzhh@shanghaitech.edu.cn
 ## 💡 Summary
 we propose a novel 2D Gaussian splatting-based MRI super-resolution framework that accommodates dynamically varying input resolutions. We further introduce a prior-aware Gaussian parameterization module to enhance structural fidelity and a physics-constrained signal modeling module to ensure biophysically plausible intensity reconstruction. 
