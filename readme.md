@@ -8,7 +8,7 @@
 [Zhiyu Tan](https://github.com/SAIS-FUXI)<sup>2,3</sup>, 
 [Hao Li](https://scholar.google.com/citations?user=pHN-QIwAAAAJ&hl=zh-CN)<sup>2,3</sup>, 
 Jun Liu<sup>4</sup>, 
-[Zhihua Ren]([https://bme.shanghaitech.edu.cn/2021/0326/c8204a1077978/page.htm](https://bme.shanghaitech.edu.cn/bme_en/2021/0326/c8252a1077980/page.htm)<sup>1,5†</sup>
+[Zhihua Ren](https://bme.shanghaitech.edu.cn/bme_en/2021/0326/c8252a1077980/page.htm)<sup>1,5†</sup>
 
 \* equal contribution # Corresponding author
 
