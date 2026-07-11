@@ -70,7 +70,12 @@ Any commercial use should get formal permission first.
 If you are interested in the following work, please cite the following paper.
 
 ```
-
+@article{wei2026phymri,
+  title={PhyMRI-SR: Toward Physics-Aware MRI Image Super-Resolution},
+  author={Wei, Lihua and Gao, Huatong and Gong, Jia and Tan, Zhiyu and Li, Hao and Liu, Jun and Ren, Zhihua},
+  journal={arXiv preprint arXiv:2607.06238},
+  year={2026}
+}
 
 
 
