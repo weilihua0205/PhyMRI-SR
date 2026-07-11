@@ -2,8 +2,8 @@
 <a href='https://bio-med-i2-lab.github.io/projects/PhyMRI-SR/'><img src='https://img.shields.io/badge/Project-Page-yellow'></a>
 <a href='https://arxiv.org/abs/2607.06238'><img src='https://img.shields.io/badge/PhyMRI--SR-Paper-red'></a>
 
-Lihua Wei<sup>1,*</sup>, 
-Huatong Gao<sup>1,*</sup>, 
+[Lihua Wei](https://scholar.google.com/citations?user=7CTTIp0AAAAJ&hl=zh-CN)<sup>1,*</sup>, 
+[Huatong Gao](https://scholar.google.com/citations?view_op=list_works&hl=zh-CN&user=JOVacMkAAAAJ&gmla=AO4B3jtmzO8ytLLvlOpe9aGw7JKkBeRygYna0CnxX4AOi9g-00esRmBAeFPK_NPhNW6p6UyGGsNfQ-x3qyUymE2LougBEtLUdXKcxA3IeC2dilAJYgPD8DEF_iI)<sup>1,*</sup>, 
 [Jia Gong](https://scholar.google.com/citations?user=ZV-ThegAAAAJ&hl=zh-CN&oi=ao)<sup>1,2,*†</sup>, 
 [Zhiyu Tan](https://github.com/SAIS-FUXI)<sup>2,3</sup>, 
 [Hao Li](https://scholar.google.com/citations?user=pHN-QIwAAAAJ&hl=zh-CN)<sup>2,3</sup>, 
