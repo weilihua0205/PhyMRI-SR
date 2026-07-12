@@ -7,7 +7,7 @@
 [Jia Gong](https://scholar.google.com/citations?user=ZV-ThegAAAAJ&hl=zh-CN&oi=ao)<sup>1,2,*†</sup>, 
 [Zhiyu Tan](https://github.com/SAIS-FUXI)<sup>2,3</sup>, 
 [Hao Li](https://scholar.google.com/citations?user=pHN-QIwAAAAJ&hl=zh-CN)<sup>2,3</sup>, 
-Jun Liu<sup>4</sup>, 
+[Jun Liu](https://mpil-lab.github.io/lab-webpage/index.html)<sup>4</sup>, 
 [Zhihua Ren](https://bme.shanghaitech.edu.cn/bme_en/2021/0326/c8252a1077980/page.htm)<sup>1,5†</sup>
 
 \* equal contribution # Corresponding author
